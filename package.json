@@ -13,9 +13,11 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@koa/cors": "^4.0.0",
         "dotenv": "^16.3.1",
         "koa": "^2.14.2",
         "koa-body": "^6.0.1",
+        "koa-cors": "^0.0.16",
         "koa-router": "^11.0.2",
         "nodemon": "^3.0.1",
         "pg": "^8.11.3",

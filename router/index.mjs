@@ -3,8 +3,8 @@ import { getClient, releaseClient } from '.././db/db.mjs';
 
 export const router = new Router();
 
-// Get all nodes
-router.get('/tree_nodes', async (ctx) => {
+// Get all root nodes
+router.get('/tree_nodes/all', async (ctx) => {
     const client = await getClient();
     try {
         const result = await client.query('SELECT * FROM tree_nodes');
@@ -21,13 +21,33 @@ router.get('/tree_nodes', async (ctx) => {
     }
 });
 
-// Get a specific node by ID (GET)
-router.get('/tree_nodes/:id', async (ctx) => {
+// Get all root nodes
+router.get('/tree_nodes/roots', async (ctx) => {
+    const client = await getClient();
+    try {
+        const result = await client.query(
+            'SELECT * FROM tree_nodes where is_root = true'
+        );
+        ctx.body = result.rows;
+    } catch (error) {
+        console.error('Error retrieving tree_nodes', error);
+        ctx.status = 500;
+        ctx.body = {
+            success: false,
+            message: 'Error retrieving tree_nodes',
+        };
+    } finally {
+        releaseClient(client);
+    }
+});
+
+// Get all childs of node by ID (GET)
+router.get('/tree_nodes/childs/:id', async (ctx) => {
     const client = await getClient();
     try {
         const nodeId = ctx.params.id;
         const result = await client.query(
-            'SELECT * FROM tree_nodes WHERE node_id = $1',
+            'SELECT * FROM tree_nodes WHERE parent_id = $1',
             [nodeId]
         );
 
@@ -40,7 +60,7 @@ router.get('/tree_nodes/:id', async (ctx) => {
         } else {
             ctx.body = {
                 success: true,
-                data: result.rows[0],
+                data: result.rows,
             };
         }
     } catch (error) {
