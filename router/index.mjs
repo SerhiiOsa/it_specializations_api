@@ -8,7 +8,9 @@ export const router = new Router();
 router.get('/tree_nodes/all', async (ctx) => {
     const client = await getClient();
     try {
-        const result = await client.query('SELECT * FROM tree_nodes');
+        const result = await client.query(
+            'SELECT node_id, node_name, description, creation_date, parent_id, is_root, node_level FROM tree_nodes'
+        );
 
         if (result.rows.length === 0) {
             ctx.status = 404;
@@ -40,7 +42,7 @@ router.get('/tree_nodes/all/:id', async (ctx) => {
     try {
         const nodeId = ctx.params.id;
         const result = await client.query(
-            'SELECT * FROM tree_nodes WHERE node_id = $1',
+            'SELECT node_id, node_name, description, creation_date, parent_id, is_root, node_level FROM tree_nodes WHERE node_id = $1',
             [nodeId]
         );
 
@@ -70,7 +72,7 @@ router.get('/tree_nodes/roots', async (ctx) => {
     const client = await getClient();
     try {
         const result = await client.query(
-            'SELECT * FROM tree_nodes where is_root = true'
+            'SELECT node_id, node_name, description, creation_date, parent_id, is_root, node_level FROM tree_nodes where is_root = true'
         );
 
         if (result.rows.length === 0) {
@@ -103,7 +105,7 @@ router.get('/tree_nodes/childs/:id', async (ctx) => {
     try {
         const nodeId = ctx.params.id;
         const result = await client.query(
-            'SELECT * FROM tree_nodes WHERE parent_id = $1',
+            'SELECT node_id, node_name, description, creation_date, parent_id, is_root, node_level FROM tree_nodes WHERE parent_id = $1',
             [nodeId]
         );
 
@@ -135,7 +137,7 @@ router.get('/tree_nodes/branch/:id', async (ctx) => {
         const nodeId = ctx.params.id;
 
         const selectedNodeQuery = await client.query(
-            'SELECT * FROM tree_nodes WHERE node_id = $1',
+            'SELECT node_id, node_name, description, creation_date, parent_id, is_root, node_level FROM tree_nodes WHERE node_id = $1',
             [nodeId]
         );
 
