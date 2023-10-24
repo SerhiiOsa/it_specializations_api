@@ -1,4 +1,5 @@
 import Koa from 'koa';
+import 'dotenv/config';
 import { koaBody } from 'koa-body';
 import { router } from './router/index.mjs';
 import pkg from 'koa-cors';
