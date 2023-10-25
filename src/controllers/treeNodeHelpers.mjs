@@ -1,4 +1,4 @@
-import { getClient, releaseClient } from '.././db/db.mjs';
+import { getClient, releaseClient } from '../db/db.mjs';
 
 export async function formatNodes(node) {
     const formattedNode = { ...node };

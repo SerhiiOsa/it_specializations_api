@@ -1,11 +1,8 @@
-import Router from 'koa-router';
-import { getClient, releaseClient } from '.././db/db.mjs';
-import { formatNodes } from './treeNodeHelpers.mjs';
-
-export const router = new Router();
+import { getClient, releaseClient } from '../db/db.mjs';
+import { formatNodes } from '../controllers/treeNodeHelpers.mjs';
 
 // Get all nodes
-router.get('/v1/nodes/list', async (ctx) => {
+export async function getNodes(ctx) {
     const client = await getClient();
     try {
         const result = await client.query(
@@ -34,10 +31,10 @@ router.get('/v1/nodes/list', async (ctx) => {
     } finally {
         releaseClient(client);
     }
-});
+}
 
 // Get single node by ID
-router.get('/v1/nodes/single/:id', async (ctx) => {
+export async function getNodeById(ctx) {
     const client = await getClient();
     try {
         const nodeId = ctx.params.id;
@@ -66,10 +63,10 @@ router.get('/v1/nodes/single/:id', async (ctx) => {
     } finally {
         releaseClient(client);
     }
-});
+}
 
 // Get all root nodes
-router.get('/v1/nodes/roots', async (ctx) => {
+export async function getRootNodes(ctx) {
     const client = await getClient();
     try {
         const result = await client.query(
@@ -99,10 +96,10 @@ router.get('/v1/nodes/roots', async (ctx) => {
     } finally {
         releaseClient(client);
     }
-});
+}
 
 // Get all childs of node by ID
-router.get('/v1/nodes/children/:id', async (ctx) => {
+export async function getChildNodes(ctx) {
     const client = await getClient();
     try {
         const nodeId = ctx.params.id;
@@ -131,10 +128,10 @@ router.get('/v1/nodes/children/:id', async (ctx) => {
     } finally {
         releaseClient(client);
     }
-});
+}
 
 // Get all nodes in the branch by ID
-router.get('/v1/nodes/branch/:id', async (ctx) => {
+export async function getNodesInBranch(ctx) {
     const client = await getClient();
     try {
         const nodeId = ctx.params.id;
@@ -169,10 +166,10 @@ router.get('/v1/nodes/branch/:id', async (ctx) => {
     } finally {
         releaseClient(client);
     }
-});
+}
 
 // Create a new root node (POST)
-router.post('/v1/nodes/add', async (ctx) => {
+export async function createRootNode(ctx) {
     const client = await getClient();
     try {
         const { node_name, description } = ctx.request.body;
@@ -199,10 +196,10 @@ router.post('/v1/nodes/add', async (ctx) => {
     } finally {
         releaseClient(client);
     }
-});
+}
 
 // Create a new child node (POST)
-router.post('/v1/nodes/add/:id', async (ctx) => {
+export async function createChildNode(ctx) {
     const client = await getClient();
     try {
         const { node_name, description } = ctx.request.body;
@@ -234,10 +231,10 @@ router.post('/v1/nodes/add/:id', async (ctx) => {
     } finally {
         releaseClient(client);
     }
-});
+}
 
 // Update an existing node (PUT)
-router.put('/v1/nodes/update/:id', async (ctx) => {
+export async function updateNode(ctx) {
     const client = await getClient();
     try {
         const nodeId = ctx.params.id;
@@ -267,10 +264,10 @@ router.put('/v1/nodes/update/:id', async (ctx) => {
     } finally {
         releaseClient(client);
     }
-});
+}
 
 // Delete a node by ID (DELETE)
-router.delete('/v1/nodes/delete/:id', async (ctx) => {
+export async function deleteNode(ctx) {
     const client = await getClient();
     try {
         const nodeId = ctx.params.id;
@@ -299,4 +296,4 @@ router.delete('/v1/nodes/delete/:id', async (ctx) => {
     } finally {
         releaseClient(client);
     }
-});
+}

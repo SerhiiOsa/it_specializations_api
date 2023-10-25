@@ -1,7 +1,7 @@
 import Koa from 'koa';
 import 'dotenv/config';
 import { koaBody } from 'koa-body';
-import { router } from './router/index.mjs';
+import { router } from './src/routes/admin.mjs';
 import pkg from 'koa-cors';
 
 const app = new Koa();
