@@ -2,10 +2,11 @@
     "name": "it_specializations_api",
     "version": "1.0.0",
     "description": "",
-    "main": "server.mjs",
+    "main": "server.js",
+    "type": "module",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "nodemon server.mjs",
+        "start": "nodemon server.js",
         "lint": "eslint . && prettier -w .",
         "prepare": "husky install"
     },

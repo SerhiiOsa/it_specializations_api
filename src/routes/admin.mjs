@@ -4,28 +4,28 @@ import * as adminController from '../controllers/admin.mjs';
 export const router = new Router();
 
 // Get all nodes
-router.get('/v1/nodes/list', adminController.getNodes);
+router.get('/api/v1/nodes/list', adminController.getNodes);
 
 // Get single node by ID
-router.get('/v1/nodes/single/:id', adminController.getNodeById);
+router.get('/api/v1/nodes/single/:id', adminController.getNodeById);
 
 // Get all root nodes
-router.get('/v1/nodes/roots', adminController.getRootNodes);
+router.get('/api/v1/nodes/roots', adminController.getRootNodes);
 
 // Get all childs of node by ID
-router.get('/v1/nodes/children/:id', adminController.getChildNodes);
+router.get('/api/v1/nodes/children/:id', adminController.getChildNodes);
 
 // Get all nodes in the branch by ID
-router.get('/v1/nodes/branch/:id', adminController.getNodesInBranch);
+router.get('/api/v1/nodes/branch/:id', adminController.getNodesInBranch);
 
 // Create a new root node (POST)
-router.post('/v1/nodes/add', adminController.createRootNode);
+router.post('/api/v1/nodes/add', adminController.createRootNode);
 
 // Create a new child node (POST)
-router.post('/v1/nodes/add/:id', adminController.createChildNode);
+router.post('/api/v1/nodes/add/:id', adminController.createChildNode);
 
 // Update an existing node (PUT)
-router.put('/v1/nodes/update/:id', adminController.updateNode);
+router.put('/api/v1/nodes/update/:id', adminController.updateNode);
 
 // Delete a node by ID (DELETE)
-router.delete('/v1/nodes/delete/:id', adminController.deleteNode);
+router.delete('/api/v1/nodes/delete/:id', adminController.deleteNode);
