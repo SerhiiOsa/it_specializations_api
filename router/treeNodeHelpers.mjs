@@ -6,9 +6,9 @@ export async function formatNodes(node) {
     const children = await fetchChildren(node.node_id);
 
     if (children.length > 0) {
-        formattedNode.childs = await Promise.all(children.map(formatNodes));
+        formattedNode.children = await Promise.all(children.map(formatNodes));
     } else {
-        formattedNode.childs = [];
+        formattedNode.children = [];
     }
 
     return formattedNode;

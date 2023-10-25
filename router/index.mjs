@@ -5,7 +5,7 @@ import { formatNodes } from './treeNodeHelpers.mjs';
 export const router = new Router();
 
 // Get all nodes
-router.get('/tree_nodes/all', async (ctx) => {
+router.get('/v1/nodes/list', async (ctx) => {
     const client = await getClient();
     try {
         const result = await client.query(
@@ -37,7 +37,7 @@ router.get('/tree_nodes/all', async (ctx) => {
 });
 
 // Get single node by ID
-router.get('/tree_nodes/all/:id', async (ctx) => {
+router.get('/v1/nodes/single/:id', async (ctx) => {
     const client = await getClient();
     try {
         const nodeId = ctx.params.id;
@@ -69,7 +69,7 @@ router.get('/tree_nodes/all/:id', async (ctx) => {
 });
 
 // Get all root nodes
-router.get('/tree_nodes/roots', async (ctx) => {
+router.get('/v1/nodes/roots', async (ctx) => {
     const client = await getClient();
     try {
         const result = await client.query(
@@ -102,7 +102,7 @@ router.get('/tree_nodes/roots', async (ctx) => {
 });
 
 // Get all childs of node by ID
-router.get('/tree_nodes/childs/:id', async (ctx) => {
+router.get('/v1/nodes/children/:id', async (ctx) => {
     const client = await getClient();
     try {
         const nodeId = ctx.params.id;
@@ -134,7 +134,7 @@ router.get('/tree_nodes/childs/:id', async (ctx) => {
 });
 
 // Get all nodes in the branch by ID
-router.get('/tree_nodes/branch/:id', async (ctx) => {
+router.get('/v1/nodes/branch/:id', async (ctx) => {
     const client = await getClient();
     try {
         const nodeId = ctx.params.id;
@@ -172,26 +172,19 @@ router.get('/tree_nodes/branch/:id', async (ctx) => {
 });
 
 // Create a new root node (POST)
-router.post('/tree_nodes/add', async (ctx) => {
+router.post('/v1/nodes/add', async (ctx) => {
     const client = await getClient();
     try {
         const { node_name, description } = ctx.request.body;
-        const parent_id = null;
-        const is_root = true;
-        const node_level = 0;
-        const creation_date = new Date();
+        const parentId = null;
+        const isRoot = true;
+        const nodeLevel = 0;
+        const creationDate = new Date();
 
         const result = await client.query(
             'INSERT INTO tree_nodes (node_name, description, creation_date, parent_id, is_root, node_level)' +
                 ' VALUES ($1, $2, $3, $4, $5, $6) RETURNING node_id',
-            [
-                node_name,
-                description,
-                creation_date,
-                parent_id,
-                is_root,
-                node_level,
-            ]
+            [node_name, description, creationDate, parentId, isRoot, nodeLevel]
         );
 
         ctx.body = {
@@ -209,31 +202,24 @@ router.post('/tree_nodes/add', async (ctx) => {
 });
 
 // Create a new child node (POST)
-router.post('/tree_nodes/add/:parent_id', async (ctx) => {
+router.post('/v1/nodes/add/:id', async (ctx) => {
     const client = await getClient();
     try {
         const { node_name, description } = ctx.request.body;
-        const parent_id = ctx.params.parent_id;
-        const is_root = false;
+        const parentId = ctx.params.id;
+        const isRoot = false;
         const parentLevelQuery = await client.query(
             'SELECT node_level from tree_nodes WHERE node_id = $1',
-            [parent_id]
+            [parentId]
         );
 
-        const node_level = 1 + parentLevelQuery.rows[0].node_level;
-        const creation_date = new Date();
+        const nodeLevel = 1 + parentLevelQuery.rows[0].node_level;
+        const creationDate = new Date();
 
         const result = await client.query(
             'INSERT INTO tree_nodes (node_name, description, creation_date, parent_id, is_root, node_level)' +
                 ' VALUES ($1, $2, $3, $4, $5, $6) RETURNING node_id',
-            [
-                node_name,
-                description,
-                creation_date,
-                parent_id,
-                is_root,
-                node_level,
-            ]
+            [node_name, description, creationDate, parentId, isRoot, nodeLevel]
         );
 
         ctx.body = {
@@ -251,7 +237,7 @@ router.post('/tree_nodes/add/:parent_id', async (ctx) => {
 });
 
 // Update an existing node (PUT)
-router.put('/tree_nodes/update/:id', async (ctx) => {
+router.put('/v1/nodes/update/:id', async (ctx) => {
     const client = await getClient();
     try {
         const nodeId = ctx.params.id;
@@ -284,7 +270,7 @@ router.put('/tree_nodes/update/:id', async (ctx) => {
 });
 
 // Delete a node by ID (DELETE)
-router.delete('/tree_nodes/delete/:id', async (ctx) => {
+router.delete('/v1/nodes/delete/:id', async (ctx) => {
     const client = await getClient();
     try {
         const nodeId = ctx.params.id;
